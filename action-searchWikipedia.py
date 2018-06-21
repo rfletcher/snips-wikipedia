@@ -41,29 +41,25 @@ def action_wrapper(hermes, intentMessage, conf):
     :param conf:
     :return:
     """
-    wiki.set_lang('de')
-    wiki.search('Albert Einstein', 5)
+    if len(intentMessage.slots.article_indicator) > 0:
+        article = intentMessage.slots.article_indicator.first().value
+        wiki.set_lang('de')
+        results = wiki.search(article, 5)
+        lines = 2
+        summary = wiki.summary(results[0], lines)
+        if "==" in summary or len(summary) > 250:
+            # We hit the end of the article summary or hit a really long
+            # one.  Reduce to first line.
+            lines = 1
+            summary = wiki.summary(results[0], lines)
+
+        summary = re.sub(r'\([^)]*\)|/[^/]*/', '', summary)
+        hermes.publish_end_session(intentMessage.session_id, summary)
+    else:
+        hermes.publish_end_session(intentMessage.session_id, "An error occured")
 
 
 if __name__ == "__main__":
-
-    wiki.set_lang('de')
-    results = wiki.search('Albert Einstein', 5)
-    if len(results) == 0:
-        print("")
-    print(results)
-    lines = 2
-    summary = wiki.summary(results[0], lines)
-    print(summary)
-    if "==" in summary or len(summary) > 250:
-        # We hit the end of the article summary or hit a really long
-        # one.  Reduce to first line.
-        lines = 1
-        summary = wiki.summary(results[0], lines)
-
-    summary = re.sub(r'\([^)]*\)|/[^/]*/', '', summary)
-    print(summary)
-
-    with Hermes("192.168.1.114:1883") as h:
+    with Hermes("localhost:1883") as h:
         h.subscribe_intent("CrystalMethod:searchWikipedia", subscribe_intent_callback) \
          .start()
