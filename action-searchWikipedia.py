@@ -53,7 +53,7 @@ def action_wrapper(hermes, intentMessage, conf):
             lines = 1
             summary = wiki.summary(results[0], lines)
 
-        summary = re.sub(r'\([^)]*\)|/[^/]*/', '', summary)
+        summary = re.sub(r'\([^)]*\)|/[^/]*/', '', summary).encode('utf8')
         hermes.publish_end_session(intentMessage.session_id, summary)
     else:
         hermes.publish_end_session(intentMessage.session_id, "An error occured")
