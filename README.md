@@ -22,3 +22,7 @@ sam install skills --git https://gitlab.smb-tec.com/snips.ai/skills/snips-wikipe
 * *"Wer war __Thomas Mann__?"*
 * *"Wann spricht man von __Extremismus__?"*
 * *"Sage mir die Definition von __Intelligenz__."*
+* 
+## Credits
+
+Credits go to [MyCroft Wiki](https://github.com/mycroftai/skill-wiki/tree/master)
