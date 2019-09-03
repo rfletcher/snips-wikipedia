@@ -39,7 +39,7 @@ def action_wrapper(hermes, intentMessage, conf):
     """
     if len(intentMessage.slots.article_indicator) > 0:
         article = intentMessage.slots.article_indicator.first().value
-        wiki.set_lang('de')
+        wiki.set_lang('en')
         try:
             results = wiki.search(article, 5)
             lines = 2
